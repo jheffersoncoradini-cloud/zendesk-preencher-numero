@@ -82,9 +82,9 @@ def webhook():
             print("Ignorado: ticket_id ausente", flush=True)
             return jsonify({"status": "ignorado", "motivo": "ticket_id ausente"}), 200
 
-        if status != "new":
-            print("Ignorado: ticket não está como new", flush=True)
-            return jsonify({"status": "ignorado", "motivo": "ticket não está como new"}), 200
+        if str(status).strip().lower() not in ["new", "novo"]:
+            print("Ignorado: ticket não está como new/novo", flush=True)
+            return jsonify({"status": "ignorado", "motivo": "ticket não está como new/novo"}), 200
 
         numero_pedido, motivo = extrair_numero_pedido(latest_comment)
         print(f"numero_pedido_extraido: {numero_pedido}", flush=True)
