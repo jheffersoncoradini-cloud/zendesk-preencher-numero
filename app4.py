@@ -16,7 +16,7 @@ def extrair_numero_pedido(texto):
         return None, "texto_vazio"
 
     encontrados = re.findall(
-        r"n[úu]mero do pedido[:\s]*([0-9]{6,})",
+        r"(?:n[úu]mero do pedido|nº do pedido|no do pedido|pedido)\s*[:\-]?\s*([0-9]{6,})",
         texto,
         re.IGNORECASE
     )
