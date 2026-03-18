@@ -65,6 +65,7 @@ def home():
 def webhook():
     try:
         data = request.json or {}
+        print("########## WEBHOOK NOVO RODANDO ##########")
         print("=== WEBHOOK RECEBIDO ===")
         print(data)
 
