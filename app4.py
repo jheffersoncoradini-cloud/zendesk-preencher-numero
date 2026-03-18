@@ -65,24 +65,36 @@ def home():
 def webhook():
     try:
         data = request.json or {}
+        print("=== WEBHOOK RECEBIDO ===")
+        print(data)
 
         ticket = data.get("ticket", {})
         ticket_id = ticket.get("id")
         status = ticket.get("status")
         latest_comment = ticket.get("latest_comment", {}).get("body", "")
 
+        print(f"ticket_id: {ticket_id}")
+        print(f"status: {status}")
+        print(f"latest_comment: {latest_comment}")
+
         if not ticket_id:
+            print("Ignorado: ticket_id ausente")
             return jsonify({"status": "ignorado", "motivo": "ticket_id ausente"}), 200
 
         if status != "new":
+            print("Ignorado: ticket não está como new")
             return jsonify({"status": "ignorado", "motivo": "ticket não está como new"}), 200
 
         numero_pedido = extrair_numero_pedido(latest_comment)
+        print(f"numero_pedido_extraido: {numero_pedido}")
 
         if not numero_pedido:
+            print("Ignorado: número do pedido não encontrado")
             return jsonify({"status": "ignorado", "motivo": "numero do pedido não encontrado"}), 200
 
         status_code, response_text = atualizar_campo_ticket(ticket_id, numero_pedido)
+        print(f"Zendesk update status_code: {status_code}")
+        print(f"Zendesk update response: {response_text}")
 
         return jsonify({
             "status": "sucesso",
@@ -93,6 +105,7 @@ def webhook():
         }), 200
 
     except Exception as e:
+        print(f"ERRO NO WEBHOOK: {str(e)}")
         return jsonify({"status": "erro", "mensagem": str(e)}), 500
 
 
